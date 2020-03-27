@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+### 3.0.0 - 2019-10-04
+
+* Breaking changes
+    * No longer removes unused elements by default. To remove unused elements set `removeUnusedElements` to true.
+    * `keepUnusedElements` has been removed.
+
 ### 2.1.8 - 2020-03-04
 
 * Fixed a bug in `processGltf` and `gltfToGlb` where the user's `options` object was getting modified with internal options. [#528](https://github.com/CesiumGS/gltf-pipeline/pull/528)

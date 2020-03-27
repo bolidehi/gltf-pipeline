@@ -69,10 +69,10 @@ const argv = yargs
             type: 'boolean',
             default: defaults.stats
         },
-        keepUnusedElements: {
-            describe: 'Keep unused materials, nodes and meshes.',
+        removeUnusedElements: {
+            describe: 'Removes unused materials, nodes, meshes, and other elements from the glTF.',
             type: 'boolean',
-            default: defaults.keepUnusedElements
+            default: defaults.removeUnusedElements
         },
         'draco.compressMeshes': {
             alias: 'd',
@@ -168,7 +168,7 @@ const options = {
     separate: argv.separate,
     separateTextures: argv.separateTextures,
     stats: argv.stats,
-    keepUnusedElements: argv.keepUnusedElements,
+    removeUnusedElements: argv.removeUnusedElements,
     name: outputName,
     dracoOptions: dracoOptions
 };
