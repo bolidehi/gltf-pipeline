@@ -14,6 +14,7 @@ Supports common operations including:
 * Saving buffers/textures as embedded or separate files
 * Converting glTF 1.0 models to glTF 2.0 (using the [KHR_techniques_webgl](https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_techniques_webgl) and [KHR_blend](https://github.com/KhronosGroup/glTF/pull/1302) extensions)
 * Applying [Draco](https://github.com/google/draco) mesh compression
+* Compressing glTF models with [gltfpack](https://github.com/zeux/meshoptimizer/tree/master/gltf)
 
 `gltf-pipeline` can be used as a command-line tool or Node.js module.
 
@@ -38,6 +39,9 @@ npm install -g gltf-pipeline
 
 #### Converting a glTF to Draco glTF
 `gltf-pipeline -i model.gltf -o modelDraco.gltf -d`
+
+#### Compressing a glTF with gltfpack (resulting glTF uses `KHR_mesh_quantization`)
+`gltf-pipeline -i model.gltf -o modelOptimized.gltf --gltfpack`
 
 ### Saving separate textures
 `gltf-pipeline -i model.gltf -t`
@@ -88,6 +92,22 @@ processGltf(gltf, options)
     });
 ```
 
+#### Compressing a glTF with gltfpack (resulting glTF uses `KHR_mesh_quantization`)
+
+```javascript
+const gltfPipeline = require('gltf-pipeline');
+const fsExtra = require('fs-extra');
+const processGltf = gltfPipeline.processGltf;
+const gltf = fsExtra.readJsonSync('model.gltf');
+const options = {
+    gltfpackOptions: {}
+};
+processGltf(gltf, options)
+    .then(function(results) {
+        fsExtra.writeJsonSync('model-optimized.gltf', results.gltf);
+    });
+```
+
 #### Saving separate textures
 
 ```javascript
@@ -133,6 +153,7 @@ processGltf(gltf, options)
 |`--draco.quantizeColorBits`|Quantization bits for color attribute when using Draco compression.|No, default `8`|
 |`--draco.quantizeGenericBits`|Quantization bits for skinning attribute (joint indices and joint weights) and custom attributes when using Draco compression.|No, default `12`|
 |`--draco.unifiedQuantization`|Quantize positions of all primitives using the same quantization grid. If not set, quantization is applied separately.|No, default `false`|
+|`--gltfpack.compress`, `--gltfpack`|Compress the model with gltfpack. Adds the KHR_mesh_quantization extension.|No, default `false`|
 
 ## Build Instructions
 

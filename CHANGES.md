@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+### 2.2.0 - 2020-??-??
+
+* Added [gltfpack](https://github.com/zeux/meshoptimizer/tree/master/gltf) stage for optimizing and compressing glTF. TODO
+
 ### 2.1.10 - 2020-05-11
 
 * Improved accessor min/max for Draco attributes. [#540](https://github.com/CesiumGS/gltf-pipeline/pull/540)

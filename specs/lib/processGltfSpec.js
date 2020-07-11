@@ -92,6 +92,15 @@ describe('processGltf', () => {
         expect(hasExtension(results.gltf, 'KHR_draco_mesh_compression')).toBe(true);
     });
 
+    it('uses gltfpack compression', async () => {
+        const gltf = fsExtra.readJsonSync(gltfPath);
+        const options = {
+            gltfpackOptions: {}
+        };
+        const results = await processGltf(gltf, options);
+        expect(hasExtension(results.gltf, 'KHR_mesh_quantization')).toBe(true);
+    });
+
     it('runs custom stages', async () => {
         spyOn(console, 'log');
         const gltf = fsExtra.readJsonSync(gltfPath);

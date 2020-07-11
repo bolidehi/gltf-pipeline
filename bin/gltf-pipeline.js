@@ -6,6 +6,7 @@ const path = require('path');
 const Promise = require('bluebird');
 const yargs = require('yargs');
 const compressDracoMeshes = require('../lib/compressDracoMeshes');
+const compressGltfpack = require('../lib/compressGltfpack');
 const glbToGltf = require('../lib/glbToGltf');
 const gltfToGlb = require('../lib/gltfToGlb');
 const processGlb = require('../lib/processGlb');
@@ -16,6 +17,7 @@ const defined = Cesium.defined;
 
 const defaults = processGltf.defaults;
 const dracoDefaults = compressDracoMeshes.defaults;
+const gltfpackDefaults = compressGltfpack.defaults; // TODO
 
 const args = process.argv;
 
@@ -119,6 +121,12 @@ const argv = yargs
             describe: 'Quantize positions of all primitives using the same quantization grid defined by the unified bounding box of all primitives. If this option is not set, quantization is applied on each primitive separately which can result in gaps appearing between different primitives.',
             type: 'boolean',
             default: dracoDefaults.unifiedQuantization
+        },
+        'gltfpack.compress': {
+            alias: 'gltfpack',
+            describe: 'Compress the model with gltfpack. Adds the KHR_mesh_quantization extension.',
+            type: 'boolean',
+            default: defaults.compressGltfpack
         }
     }).parse(args);
 
@@ -153,13 +161,20 @@ if (outputExtension !== '.gltf' && outputExtension !== '.glb') {
     return;
 }
 
-let i;
 let dracoOptions;
 const length = args.length;
-for (i = 0; i < length; ++i) {
+for (let i = 0; i < length; ++i) {
     const arg = args[i];
     if (arg.indexOf('--draco.') === 0 || arg === '-d') {
         dracoOptions = defaultValue(argv.draco, {});
+    }
+}
+
+let gltfpackOptions;
+for (let i = 0; i < length; ++i) {
+    const arg = args[i];
+    if (arg.indexOf('--gltfpack.') === 0 || arg === '--gltfpack') {
+        gltfpackOptions = defaultValue(argv.gltfpack, {});
     }
 }
 
@@ -170,7 +185,8 @@ const options = {
     stats: argv.stats,
     keepUnusedElements: argv.keepUnusedElements,
     name: outputName,
-    dracoOptions: dracoOptions
+    dracoOptions: dracoOptions,
+    gltfpackOptions: gltfpackOptions
 };
 
 const inputIsBinary = inputExtension === '.glb';
